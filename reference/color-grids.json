@@ -1,5 +1,5 @@
 {
- "note": "Each point is a 9x9 pixel average. x and y are fractions of the frame, y down. Compare with the maximum channel difference per point.",
+ "note": "Each point is a 9x9 pixel average. x and y are fractions of the frame, y down. Compare with the maximum channel difference per point. Frames are PNG: a JPEG copy shifts the colours.",
  "sun-orb.default": {
   "frame": "sun-orb/frame-default-1910x1700.png",
   "points": [
@@ -821,822 +821,822 @@
   ]
  },
  "modern-creatives.gradient": {
-  "frame": "modern-creatives/frame-gradient-3022x1708.jpg",
+  "frame": "modern-creatives/frame-gradient-3022x1708.png",
   "points": [
    {
     "x": 0.01,
     "y": 0.02,
-    "hex": "#E7E7E7"
+    "hex": "#E5E5E5"
    },
    {
     "x": 0.125,
     "y": 0.02,
-    "hex": "#E7E7E7"
+    "hex": "#E5E5E5"
    },
    {
     "x": 0.25,
     "y": 0.02,
-    "hex": "#E7E7E7"
+    "hex": "#E5E5E5"
    },
    {
     "x": 0.375,
     "y": 0.02,
-    "hex": "#E7E7E7"
+    "hex": "#E5E5E5"
    },
    {
     "x": 0.5,
     "y": 0.02,
-    "hex": "#E7E7E7"
+    "hex": "#E5E5E5"
    },
    {
     "x": 0.625,
     "y": 0.02,
-    "hex": "#E7E7E7"
+    "hex": "#E5E5E5"
    },
    {
     "x": 0.75,
     "y": 0.02,
-    "hex": "#E7E7E7"
+    "hex": "#E5E5E5"
    },
    {
     "x": 0.875,
     "y": 0.02,
-    "hex": "#E7E7E7"
+    "hex": "#E5E5E5"
    },
    {
     "x": 0.99,
     "y": 0.02,
-    "hex": "#E7E7E7"
+    "hex": "#E5E5E5"
    },
    {
     "x": 0.01,
     "y": 0.125,
-    "hex": "#E6E5E7"
+    "hex": "#E4E3E4"
    },
    {
     "x": 0.125,
     "y": 0.125,
-    "hex": "#E5E0E6"
+    "hex": "#E4DFE4"
    },
    {
     "x": 0.25,
     "y": 0.125,
-    "hex": "#E5DFE5"
+    "hex": "#E4DEE3"
    },
    {
     "x": 0.375,
     "y": 0.125,
-    "hex": "#E6E4E7"
+    "hex": "#E5E2E6"
    },
    {
     "x": 0.5,
     "y": 0.125,
-    "hex": "#E7E7E7"
+    "hex": "#E5E5E5"
    },
    {
     "x": 0.625,
     "y": 0.125,
-    "hex": "#E7E7E7"
+    "hex": "#E5E5E5"
    },
    {
     "x": 0.75,
     "y": 0.125,
-    "hex": "#E7E7E7"
+    "hex": "#E5E5E5"
    },
    {
     "x": 0.875,
     "y": 0.125,
-    "hex": "#E6E7E6"
+    "hex": "#E5E5E5"
    },
    {
     "x": 0.99,
     "y": 0.125,
-    "hex": "#E5E1E7"
+    "hex": "#E5E0E5"
    },
    {
     "x": 0.01,
     "y": 0.25,
-    "hex": "#E2CAD5"
+    "hex": "#E3CBD3"
    },
    {
     "x": 0.125,
     "y": 0.25,
-    "hex": "#E1BDCF"
+    "hex": "#E2C0CD"
    },
    {
     "x": 0.25,
     "y": 0.25,
-    "hex": "#E3B6DA"
+    "hex": "#E4BAD8"
    },
    {
     "x": 0.375,
     "y": 0.25,
-    "hex": "#E5CDE3"
+    "hex": "#E5CFE3"
    },
    {
     "x": 0.5,
     "y": 0.25,
-    "hex": "#E6E1E7"
+    "hex": "#E5E1E6"
    },
    {
     "x": 0.625,
     "y": 0.25,
-    "hex": "#E7E7E7"
+    "hex": "#E5E5E5"
    },
    {
     "x": 0.75,
     "y": 0.25,
-    "hex": "#E7E7E7"
+    "hex": "#E5E5E5"
    },
    {
     "x": 0.875,
     "y": 0.25,
-    "hex": "#E6DAE8"
+    "hex": "#E6D9E6"
    },
    {
     "x": 0.99,
     "y": 0.25,
-    "hex": "#E4C1E5"
+    "hex": "#E5C4E6"
    },
    {
     "x": 0.01,
     "y": 0.375,
-    "hex": "#E48AA0"
+    "hex": "#EA929E"
    },
    {
     "x": 0.125,
     "y": 0.375,
-    "hex": "#E37695"
+    "hex": "#EA7F95"
    },
    {
     "x": 0.25,
     "y": 0.375,
-    "hex": "#E573AC"
+    "hex": "#ED7FAA"
    },
    {
     "x": 0.375,
     "y": 0.375,
-    "hex": "#E697D6"
+    "hex": "#E9A0D5"
    },
    {
     "x": 0.5,
     "y": 0.375,
-    "hex": "#E5CAE6"
+    "hex": "#E6CCE5"
    },
    {
     "x": 0.625,
     "y": 0.375,
-    "hex": "#E5DFE6"
+    "hex": "#E4DEE6"
    },
    {
     "x": 0.75,
     "y": 0.375,
-    "hex": "#E6D4E5"
+    "hex": "#E6D5E5"
    },
    {
     "x": 0.875,
     "y": 0.375,
-    "hex": "#E2B1E2"
+    "hex": "#E5B6E3"
    },
    {
     "x": 0.99,
     "y": 0.375,
-    "hex": "#E28EE3"
+    "hex": "#E799E4"
    },
    {
     "x": 0.01,
     "y": 0.5,
-    "hex": "#E94A66"
+    "hex": "#F55964"
    },
    {
     "x": 0.125,
     "y": 0.5,
-    "hex": "#EC4060"
+    "hex": "#F8515E"
    },
    {
     "x": 0.25,
     "y": 0.5,
-    "hex": "#E94072"
+    "hex": "#F65170"
    },
    {
     "x": 0.375,
     "y": 0.5,
-    "hex": "#EFC1DE"
+    "hex": "#F0C5DD"
    },
    {
     "x": 0.5,
     "y": 0.5,
-    "hex": "#ECD6F2"
+    "hex": "#EBD8F2"
    },
    {
     "x": 0.625,
     "y": 0.5,
-    "hex": "#E5BBE1"
+    "hex": "#E6C0E1"
    },
    {
     "x": 0.75,
     "y": 0.5,
-    "hex": "#E6A6DA"
+    "hex": "#EAADDA"
    },
    {
     "x": 0.875,
     "y": 0.5,
-    "hex": "#E479CF"
+    "hex": "#EC86CF"
    },
    {
     "x": 0.99,
     "y": 0.5,
-    "hex": "#E266C9"
+    "hex": "#EA75CA"
    },
    {
     "x": 0.01,
     "y": 0.625,
-    "hex": "#ED3352"
+    "hex": "#FB444E"
    },
    {
     "x": 0.125,
     "y": 0.625,
-    "hex": "#EC3150"
+    "hex": "#FA434C"
    },
    {
     "x": 0.25,
     "y": 0.625,
-    "hex": "#EA3254"
+    "hex": "#F84351"
    },
    {
     "x": 0.375,
     "y": 0.625,
-    "hex": "#E9407D"
+    "hex": "#F4537C"
    },
    {
     "x": 0.5,
     "y": 0.625,
-    "hex": "#E367C4"
+    "hex": "#EC76C4"
    },
    {
     "x": 0.625,
     "y": 0.625,
-    "hex": "#E37DCE"
+    "hex": "#EA8AD0"
    },
    {
     "x": 0.75,
     "y": 0.625,
-    "hex": "#E66AB9"
+    "hex": "#ED77BA"
    },
    {
     "x": 0.875,
     "y": 0.625,
-    "hex": "#E65097"
+    "hex": "#F16096"
    },
    {
     "x": 0.99,
     "y": 0.625,
-    "hex": "#E6578E"
+    "hex": "#F1658E"
    },
    {
     "x": 0.01,
     "y": 0.75,
-    "hex": "#EC3150"
+    "hex": "#FA434C"
    },
    {
     "x": 0.125,
     "y": 0.75,
-    "hex": "#EE3352"
+    "hex": "#FB444E"
    },
    {
     "x": 0.25,
     "y": 0.75,
-    "hex": "#ED3251"
+    "hex": "#FB444D"
    },
    {
     "x": 0.375,
     "y": 0.75,
-    "hex": "#EC3660"
+    "hex": "#F9495D"
    },
    {
     "x": 0.5,
     "y": 0.75,
-    "hex": "#E9488E"
+    "hex": "#F5598D"
    },
    {
     "x": 0.625,
     "y": 0.75,
-    "hex": "#E74D97"
+    "hex": "#F35E97"
    },
    {
     "x": 0.75,
     "y": 0.75,
-    "hex": "#E9427F"
+    "hex": "#F5547C"
    },
    {
     "x": 0.875,
     "y": 0.75,
-    "hex": "#EC455F"
+    "hex": "#F9555C"
    },
    {
     "x": 0.99,
     "y": 0.75,
-    "hex": "#EC6455"
+    "hex": "#F56E51"
    },
    {
     "x": 0.01,
     "y": 0.875,
-    "hex": "#EC3150"
+    "hex": "#FA434D"
    },
    {
     "x": 0.125,
     "y": 0.875,
-    "hex": "#EC3150"
+    "hex": "#FA434C"
    },
    {
     "x": 0.25,
     "y": 0.875,
-    "hex": "#EC3150"
+    "hex": "#FA434C"
    },
    {
     "x": 0.375,
     "y": 0.875,
-    "hex": "#EE3352"
+    "hex": "#FB444D"
    },
    {
     "x": 0.5,
     "y": 0.875,
-    "hex": "#EB355D"
+    "hex": "#FA465B"
    },
    {
     "x": 0.625,
     "y": 0.875,
-    "hex": "#EB3763"
+    "hex": "#F94961"
    },
    {
     "x": 0.75,
     "y": 0.875,
-    "hex": "#EC3956"
+    "hex": "#FA4A53"
    },
    {
     "x": 0.875,
     "y": 0.875,
-    "hex": "#F05B42"
+    "hex": "#FB663E"
    },
    {
     "x": 0.99,
     "y": 0.875,
-    "hex": "#F2813A"
+    "hex": "#FA8633"
    },
    {
     "x": 0.01,
     "y": 0.97,
-    "hex": "#EC3150"
+    "hex": "#FA434C"
    },
    {
     "x": 0.125,
     "y": 0.97,
-    "hex": "#ED3251"
+    "hex": "#FB444D"
    },
    {
     "x": 0.25,
     "y": 0.97,
-    "hex": "#EC3150"
+    "hex": "#FA434C"
    },
    {
     "x": 0.375,
     "y": 0.97,
-    "hex": "#ED3251"
+    "hex": "#FA434C"
    },
    {
     "x": 0.5,
     "y": 0.97,
-    "hex": "#ED3152"
+    "hex": "#FB4350"
    },
    {
     "x": 0.625,
     "y": 0.97,
-    "hex": "#ED3252"
+    "hex": "#FA444F"
    },
    {
     "x": 0.75,
     "y": 0.97,
-    "hex": "#EC3B4D"
+    "hex": "#FA4B4A"
    },
    {
     "x": 0.875,
     "y": 0.97,
-    "hex": "#F4723C"
+    "hex": "#FC7937"
    },
    {
     "x": 0.99,
     "y": 0.97,
-    "hex": "#F39130"
+    "hex": "#FC9228"
    }
   ]
  },
  "imagine.figure": {
-  "frame": "imagine/frame-figure-3022x1708.jpg",
+  "frame": "imagine/frame-figure-3022x1708.png",
   "points": [
    {
     "x": 0.01,
     "y": 0.02,
-    "hex": "#F6CA9A"
+    "hex": "#FACA96"
    },
    {
     "x": 0.125,
     "y": 0.02,
-    "hex": "#F6CA9A"
+    "hex": "#FACA96"
    },
    {
     "x": 0.25,
     "y": 0.02,
-    "hex": "#F6CA9A"
+    "hex": "#FACA96"
    },
    {
     "x": 0.375,
     "y": 0.02,
-    "hex": "#F6CA9A"
+    "hex": "#FACA96"
    },
    {
     "x": 0.5,
     "y": 0.02,
-    "hex": "#F6CA9A"
+    "hex": "#FACA96"
    },
    {
     "x": 0.625,
     "y": 0.02,
-    "hex": "#F6CA9A"
+    "hex": "#FACA96"
    },
    {
     "x": 0.75,
     "y": 0.02,
-    "hex": "#F6CA9A"
+    "hex": "#FACA96"
    },
    {
     "x": 0.875,
     "y": 0.02,
-    "hex": "#F6CA9A"
+    "hex": "#FACA96"
    },
    {
     "x": 0.99,
     "y": 0.02,
-    "hex": "#F6CA9A"
+    "hex": "#FACA96"
    },
    {
     "x": 0.01,
     "y": 0.125,
-    "hex": "#EDC4A4"
+    "hex": "#F1C4A0"
    },
    {
     "x": 0.125,
     "y": 0.125,
-    "hex": "#EDC5A4"
+    "hex": "#F1C4A0"
    },
    {
     "x": 0.25,
     "y": 0.125,
-    "hex": "#EDC5A4"
+    "hex": "#F1C4A0"
    },
    {
     "x": 0.375,
     "y": 0.125,
-    "hex": "#EDC5A4"
+    "hex": "#F1C4A0"
    },
    {
     "x": 0.5,
     "y": 0.125,
-    "hex": "#EDC5A4"
+    "hex": "#F1C4A0"
    },
    {
     "x": 0.625,
     "y": 0.125,
-    "hex": "#EDC5A4"
+    "hex": "#F1C4A0"
    },
    {
     "x": 0.75,
     "y": 0.125,
-    "hex": "#EDC5A4"
+    "hex": "#F1C4A0"
    },
    {
     "x": 0.875,
     "y": 0.125,
-    "hex": "#EDC5A4"
+    "hex": "#F1C4A0"
    },
    {
     "x": 0.99,
     "y": 0.125,
-    "hex": "#EDC4A4"
+    "hex": "#F1C4A0"
    },
    {
     "x": 0.01,
     "y": 0.25,
-    "hex": "#E2BCAF"
+    "hex": "#E4BDAC"
    },
    {
     "x": 0.125,
     "y": 0.25,
-    "hex": "#E2BCAF"
+    "hex": "#E4BDAD"
    },
    {
     "x": 0.25,
     "y": 0.25,
-    "hex": "#E2BCAF"
+    "hex": "#E4BDAD"
    },
    {
     "x": 0.375,
     "y": 0.25,
-    "hex": "#E2BCB0"
+    "hex": "#E4BDAC"
    },
    {
     "x": 0.5,
     "y": 0.25,
-    "hex": "#D25D90"
+    "hex": "#D9698F"
    },
    {
     "x": 0.625,
     "y": 0.25,
-    "hex": "#E2BCAF"
+    "hex": "#E4BDAC"
    },
    {
     "x": 0.75,
     "y": 0.25,
-    "hex": "#E2BCAF"
+    "hex": "#E4BDAD"
    },
    {
     "x": 0.875,
     "y": 0.25,
-    "hex": "#E2BCAF"
+    "hex": "#E4BDAD"
    },
    {
     "x": 0.99,
     "y": 0.25,
-    "hex": "#E2BCAF"
+    "hex": "#E4BDAC"
    },
    {
     "x": 0.01,
     "y": 0.375,
-    "hex": "#D6B3B9"
+    "hex": "#D8B5B9"
    },
    {
     "x": 0.125,
     "y": 0.375,
-    "hex": "#D7B4BB"
+    "hex": "#D8B5BA"
    },
    {
     "x": 0.25,
     "y": 0.375,
-    "hex": "#D7B4BB"
+    "hex": "#D8B5BA"
    },
    {
     "x": 0.375,
     "y": 0.375,
-    "hex": "#E3AFB5"
+    "hex": "#E6B3B4"
    },
    {
     "x": 0.5,
     "y": 0.375,
-    "hex": "#E49994"
+    "hex": "#E89E90"
    },
    {
     "x": 0.625,
     "y": 0.375,
-    "hex": "#D7B4BA"
+    "hex": "#D8B5BA"
    },
    {
     "x": 0.75,
     "y": 0.375,
-    "hex": "#D7B4BA"
+    "hex": "#D8B5B9"
    },
    {
     "x": 0.875,
     "y": 0.375,
-    "hex": "#D7B4BA"
+    "hex": "#D8B5B9"
    },
    {
     "x": 0.99,
     "y": 0.375,
-    "hex": "#D7B4BB"
+    "hex": "#D8B5BA"
    },
    {
     "x": 0.01,
     "y": 0.5,
-    "hex": "#CBADC9"
+    "hex": "#CCAFC8"
    },
    {
     "x": 0.125,
     "y": 0.5,
-    "hex": "#CBADC9"
+    "hex": "#CCAFC8"
    },
    {
     "x": 0.25,
     "y": 0.5,
-    "hex": "#CAACC8"
+    "hex": "#CBAEC7"
    },
    {
     "x": 0.375,
     "y": 0.5,
-    "hex": "#EAC2B3"
+    "hex": "#ECC2B1"
    },
    {
     "x": 0.5,
     "y": 0.5,
-    "hex": "#F0C59A"
+    "hex": "#F2C596"
    },
    {
     "x": 0.625,
     "y": 0.5,
-    "hex": "#CBADC6"
+    "hex": "#CCAFC6"
    },
    {
     "x": 0.75,
     "y": 0.5,
-    "hex": "#CAACC6"
+    "hex": "#CBAEC5"
    },
    {
     "x": 0.875,
     "y": 0.5,
-    "hex": "#CAACC6"
+    "hex": "#CBAEC5"
    },
    {
     "x": 0.99,
     "y": 0.5,
-    "hex": "#CBADC6"
+    "hex": "#CCAFC6"
    },
    {
     "x": 0.01,
     "y": 0.625,
-    "hex": "#C0A4D4"
+    "hex": "#C0A8D4"
    },
    {
     "x": 0.125,
     "y": 0.625,
-    "hex": "#BFA3D3"
+    "hex": "#BEA7D3"
    },
    {
     "x": 0.25,
     "y": 0.625,
-    "hex": "#C0A4D4"
+    "hex": "#C0A8D4"
    },
    {
     "x": 0.375,
     "y": 0.625,
-    "hex": "#E9C7AC"
+    "hex": "#ECC8A9"
    },
    {
     "x": 0.5,
     "y": 0.625,
-    "hex": "#EFCD9F"
+    "hex": "#F0CB9A"
    },
    {
     "x": 0.625,
     "y": 0.625,
-    "hex": "#BFA3D3"
+    "hex": "#BFA7D3"
    },
    {
     "x": 0.75,
     "y": 0.625,
-    "hex": "#C0A4D4"
+    "hex": "#C0A8D4"
    },
    {
     "x": 0.875,
     "y": 0.625,
-    "hex": "#BEA2D2"
+    "hex": "#BEA7D3"
    },
    {
     "x": 0.99,
     "y": 0.625,
-    "hex": "#C0A4D4"
+    "hex": "#C0A8D4"
    },
    {
     "x": 0.01,
     "y": 0.75,
-    "hex": "#B39CDF"
+    "hex": "#B4A0E2"
    },
    {
     "x": 0.125,
     "y": 0.75,
-    "hex": "#B39CE0"
+    "hex": "#B4A0E1"
    },
    {
     "x": 0.25,
     "y": 0.75,
-    "hex": "#B39CDF"
+    "hex": "#B4A0E1"
    },
    {
     "x": 0.375,
     "y": 0.75,
-    "hex": "#E9C7AE"
+    "hex": "#EBC6AD"
    },
    {
     "x": 0.5,
     "y": 0.75,
-    "hex": "#E6C0A9"
+    "hex": "#E9C1A8"
    },
    {
     "x": 0.625,
     "y": 0.75,
-    "hex": "#B39CDF"
+    "hex": "#B4A0E2"
    },
    {
     "x": 0.75,
     "y": 0.75,
-    "hex": "#B39CDF"
+    "hex": "#B4A0E1"
    },
    {
     "x": 0.875,
     "y": 0.75,
-    "hex": "#B39CE0"
+    "hex": "#B4A0E2"
    },
    {
     "x": 0.99,
     "y": 0.75,
-    "hex": "#B39CDF"
+    "hex": "#B4A0E1"
    },
    {
     "x": 0.01,
     "y": 0.875,
-    "hex": "#A793EC"
+    "hex": "#A698EE"
    },
    {
     "x": 0.125,
     "y": 0.875,
-    "hex": "#A894EA"
+    "hex": "#A799EE"
    },
    {
     "x": 0.25,
     "y": 0.875,
-    "hex": "#A894EC"
+    "hex": "#A799EE"
    },
    {
     "x": 0.375,
     "y": 0.875,
-    "hex": "#E5C4B3"
+    "hex": "#E6C4B0"
    },
    {
     "x": 0.5,
     "y": 0.875,
-    "hex": "#DFB0B0"
+    "hex": "#E1B2AD"
    },
    {
     "x": 0.625,
     "y": 0.875,
-    "hex": "#AC91E7"
+    "hex": "#AC96E8"
    },
    {
     "x": 0.75,
     "y": 0.875,
-    "hex": "#A893EF"
+    "hex": "#A799F0"
    },
    {
     "x": 0.875,
     "y": 0.875,
-    "hex": "#A793EC"
+    "hex": "#A698EE"
    },
    {
     "x": 0.99,
     "y": 0.875,
-    "hex": "#A793EC"
+    "hex": "#A698EE"
    },
    {
     "x": 0.01,
     "y": 0.97,
-    "hex": "#9F8DF3"
+    "hex": "#9E92F7"
    },
    {
     "x": 0.125,
     "y": 0.97,
-    "hex": "#9F8CF5"
+    "hex": "#9E92F8"
    },
    {
     "x": 0.25,
     "y": 0.97,
-    "hex": "#9F8CF6"
+    "hex": "#9E92F9"
    },
    {
     "x": 0.375,
     "y": 0.97,
-    "hex": "#E3C3B6"
+    "hex": "#E4C3B4"
    },
    {
     "x": 0.5,
     "y": 0.97,
-    "hex": "#DDAAAF"
+    "hex": "#DFAEAD"
    },
    {
     "x": 0.625,
     "y": 0.97,
-    "hex": "#B97FCD"
+    "hex": "#BC86CD"
    },
    {
     "x": 0.75,
     "y": 0.97,
-    "hex": "#9F8CF5"
+    "hex": "#9E92F8"
    },
    {
     "x": 0.875,
     "y": 0.97,
-    "hex": "#9F8CF5"
+    "hex": "#9E92F8"
    },
    {
     "x": 0.99,
     "y": 0.97,
-    "hex": "#9F8CF5"
+    "hex": "#9E92F8"
    }
   ]
  }

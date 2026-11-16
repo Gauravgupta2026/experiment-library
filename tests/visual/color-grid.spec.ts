@@ -52,3 +52,25 @@ test('sun orb: approved state matches the reference', async ({ page }) => {
   console.log('sun-orb.approved', r);
   expect(r.mean).toBeLessThanOrEqual(9);
 });
+
+test('modern creatives: gradient matches the reference', async ({ page }) => {
+  // shaderTime=5 puts the drifting blobs where they were when the prototype was measured.
+  const png = await captureFrame(page, '/e/modern-creatives?capture=1&t=6.2&shaderTime=5', 1511, 854);
+  // The headline covers the middle row in the reference frame and in ours, at slightly different places.
+  // Those points measure text, not gradient, so they are left out.
+  const r = compare(png, grid('modern-creatives.gradient').points, (p) => !(p.y === 0.5 && p.x > 0.15 && p.x < 0.85));
+  console.log('modern-creatives.gradient', r);
+  expect(r.mean).toBeLessThanOrEqual(10);
+});
+
+test('imagine: figure matches the reference', async ({ page }) => {
+  const png = await captureFrame(page, '/e/imagine?capture=1&t=0.5', 1511, 854);
+  const points = grid('imagine.figure').points;
+  const r = compare(png, points);
+  console.log('imagine.figure', r);
+  expect(r.mean).toBeLessThanOrEqual(9);
+  expect(r.max).toBeLessThanOrEqual(40);
+  // Points outside the figure are pure background: they must be almost exact.
+  const bg = compare(png, points, (p) => p.x < 0.2 || p.x > 0.8);
+  expect(bg.max).toBeLessThanOrEqual(4);
+});
