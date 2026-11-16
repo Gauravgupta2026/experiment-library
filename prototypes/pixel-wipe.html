@@ -1,0 +1,144 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Gradient figure + pixel wipe prototype</title>
+<style>
+  html,body{margin:0;height:100%;background:#111;font-family:"Inter Tight",Inter,-apple-system,system-ui,sans-serif}
+  #stage{position:relative;width:100vw;aspect-ratio:3022/1708;overflow:hidden;background:#E5E5E5}
+  canvas{position:absolute;inset:0;width:100%;height:100%}
+  #line{position:absolute;left:19.8%;top:50%;transform:translateY(-50%);margin:0;font-weight:300;
+    font-size:4.6vw;letter-spacing:-.035em;white-space:pre;color:#fff}
+  #line span{opacity:0}
+  #hud{position:fixed;left:8px;bottom:8px;display:flex;gap:6px}
+  #hud button{font:12px system-ui;padding:4px 10px;border-radius:99px;border:0;background:#222;color:#fff}
+</style>
+<div id="stage">
+  <canvas id="c"></canvas>
+  <p id="line"></p>
+</div>
+<div id="hud"><button id="replay">Replay</button><input id="scrub" type="range" min="0" max="6" step="0.01" value="0" style="width:300px"></div>
+<script>
+/*
+ * Timeline (seconds), read from the reference recording:
+ *   0.0 - 2.0  figure only, palette phase still
+ *   2.0 - 3.2  text reveals letter by letter, palette phase runs
+ *   3.3 - 3.6  glitch: thin white lines + one displaced band
+ *   3.5 - 5.1  pixel wipe to #E5E5E5, top-left to bottom-right
+ */
+const T={textIn:2.0,letterStagger:.035,letterFade:.35,letterWhite:.6,glitch:3.3,wipe:3.5,wipeDur:1.6,end:6};
+
+const FRAG=`
+precision highp float;
+uniform vec2 uRes;uniform float uTime;uniform float uPhase;uniform float uWipe;uniform float uGlitch;
+vec3 hex(float r,float g,float b){return vec3(r,g,b)/255.;}
+float hash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
+float vnoise(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);
+  return mix(mix(hash(i),hash(i+vec2(1,0)),f.x),mix(hash(i+vec2(0,1)),hash(i+vec2(1,1)),f.x),f.y);}
+float sdSeg(vec2 p,vec2 a,vec2 b){vec2 pa=p-a,ba=b-a;return length(pa-ba*clamp(dot(pa,ba)/dot(ba,ba),0.,1.));}
+float smin(float a,float b,float k){float h=clamp(.5+.5*(b-a)/k,0.,1.);return mix(b,a,h)-k*h*(1.-h);}
+
+// Cyclic palette for the figure. t is any real; one cycle = 1.
+vec3 figurePalette(float t){
+  t=fract(t)*5.;
+  vec3 a=hex(214.,92.,146.);   // pink
+  vec3 b=hex(245.,204.,144.);  // yellow peach
+  vec3 c=hex(235.,198.,173.);  // light peach
+  vec3 d=hex(226.,100.,176.);  // magenta
+  vec3 e=hex(184.,144.,240.);  // violet
+  if(t<1.)return mix(a,b,smoothstep(0.,1.,t));
+  if(t<2.)return mix(b,c,smoothstep(0.,1.,t-1.));
+  if(t<3.)return mix(c,d,smoothstep(0.,1.,t-2.));
+  if(t<4.)return mix(d,e,smoothstep(0.,1.,t-3.));
+  return mix(e,a,smoothstep(0.,1.,t-4.));
+}
+
+vec3 scene(vec2 uv){               // uv: 0..1, y down
+  // Reference space 1500x848 (y down) so numbers match the reference frame.
+  vec2 P=uv*vec2(1500.,848.);
+  vec3 bg=mix(hex(250.,202.,150.),hex(158.,146.,248.),smoothstep(0.,1.,uv.y));
+  // Figure: head + hair/back + shoulder, smooth union, then one soft edge.
+  float head=length(P-vec2(745.,300.))-172.;
+  float face=length(P-vec2(868.,345.))-52.;
+  float back=sdSeg(P,vec2(690.,360.),vec2(640.,900.))-178.;
+  float sh=sdSeg(P,vec2(800.,610.),vec2(925.,900.))-42.;
+  float d=smin(smin(head,face,40.),smin(back,sh,60.),70.);
+  float a=1.-smoothstep(-55.,45.,d);
+  // Scalar that runs top to bottom inside the figure, bent a little by x.
+  float t=(P.y-130.)/720.*.42+(P.x-750.)/1500.*.10;
+  vec3 fig=figurePalette(t+uPhase);
+  // shoulder edge picks up the first palette colour again
+  fig=mix(fig,figurePalette(uPhase),(1.-smoothstep(0.,70.,abs(sh)))*.45*smoothstep(540.,700.,P.y));
+  return mix(bg,fig,a);
+}
+
+void main(){
+  vec2 uv=vec2(gl_FragCoord.x/uRes.x,1.-gl_FragCoord.y/uRes.y);
+  // --- glitch: one displaced band and a few thin lines ---
+  vec2 guv=uv;
+  float band=step(.60,uv.y)*step(uv.y,.80);
+  guv.x+=uGlitch*band*.045;
+  vec3 col=scene(guv);
+  float row=floor(gl_FragCoord.y);
+  float ln=step(.9965,hash(vec2(row,floor(uTime*10.))));
+  col=mix(col,vec3(1.),ln*uGlitch*.55);
+
+  // --- pixel wipe ---
+  float cell=uRes.x/50.;                         // 50 columns
+  vec2 cuv=(floor(vec2(gl_FragCoord.x,uRes.y-gl_FragCoord.y)/cell)+.5)*cell/uRes; // cell centre, 0..1
+  float n=vnoise(vec2(cuv.x*3.2+uTime*.35,cuv.y*2.+uTime*.2))-.5;
+  float n2=vnoise(vec2(cuv.x*9.+3.,uTime*.9))-.5;
+  float w=cuv.y+.58*cuv.x+n*.34+n2*.05;          // field: small = wiped first
+  float prog=mix(-.25,1.85,uWipe);
+  float bandW=1.6*cell/uRes.y;                   // coloured edge is about 1.6 cells deep
+  vec3 gray=hex(229.,229.,229.);
+  if(w<prog-bandW){col=gray;}
+  else if(w<prog){
+    float h=hash(floor(vec2(gl_FragCoord.x,uRes.y-gl_FragCoord.y)/cell)+floor(uTime*14.)*7.);
+    vec3 e=h<.22?hex(216.,96.,240.):h<.42?hex(248.,184.,96.):h<.6?hex(240.,150.,205.):h<.74?hex(248.,214.,240.):col;
+    col=e;
+  }
+  gl_FragColor=vec4(col,1.);
+}`;
+const canvas=document.getElementById('c'),gl=canvas.getContext('webgl',{preserveDrawingBuffer:true});
+function sh(t,s){const o=gl.createShader(t);gl.shaderSource(o,s);gl.compileShader(o);if(!gl.getShaderParameter(o,gl.COMPILE_STATUS))throw new Error(gl.getShaderInfoLog(o));return o;}
+const pr=gl.createProgram();gl.attachShader(pr,sh(gl.VERTEX_SHADER,'attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}'));
+gl.attachShader(pr,sh(gl.FRAGMENT_SHADER,FRAG));gl.linkProgram(pr);gl.useProgram(pr);
+gl.bindBuffer(gl.ARRAY_BUFFER,gl.createBuffer());gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,3,-1,-1,3]),gl.STATIC_DRAW);
+gl.enableVertexAttribArray(0);gl.vertexAttribPointer(0,2,gl.FLOAT,false,0,0);
+const U={};for(const n of['uRes','uTime','uPhase','uWipe','uGlitch'])U[n]=gl.getUniformLocation(pr,n);
+function fit(){const r=canvas.getBoundingClientRect(),d=Math.min(2,devicePixelRatio||1);canvas.width=r.width*d;canvas.height=r.height*d;}
+addEventListener('resize',fit);fit();
+
+// text
+const TEXT='Imagine to have all your tools';
+const line=document.getElementById('line');
+[...TEXT].forEach(ch=>{const s=document.createElement('span');s.textContent=ch;line.appendChild(s);});
+const clamp01=x=>Math.max(0,Math.min(1,x)),ease=x=>x*x*(3-2*x);
+function lerpRGB(a,b,t){return a.map((v,i)=>Math.round(v+(b[i]-v)*t));}
+
+function render(t){
+  // palette phase: still for 2 s, then one slow cycle
+  const phase=.0+ (t>T.textIn? (t-T.textIn)*.33:0);
+  const wipe=clamp01((t-T.wipe)/T.wipeDur);
+  const g=t>T.glitch&&t<T.wipe+.5?1:0;
+  gl.viewport(0,0,canvas.width,canvas.height);
+  gl.uniform2f(U.uRes,canvas.width,canvas.height);gl.uniform1f(U.uTime,t);
+  gl.uniform1f(U.uPhase,phase);gl.uniform1f(U.uWipe,wipe);gl.uniform1f(U.uGlitch,g);
+  gl.drawArrays(gl.TRIANGLES,0,3);
+  // letters: fade in, start orange/pink, settle to white
+  [...line.children].forEach((s,i)=>{
+    const lt=t-T.textIn-i*T.letterStagger;
+    s.style.opacity=ease(clamp01(lt/T.letterFade));
+    const k=ease(clamp01((lt-.15)/T.letterWhite));
+    const warm=lerpRGB([245,160,80],[232,96,192],.5+.5*Math.sin(i*.45+t*3));
+    s.style.color='rgb('+lerpRGB(warm,[255,255,255],k).join(',')+')';
+  });
+  // the wipe also clips the text: same field, approximated with a moving clip-path
+  line.style.clipPath=wipe>0?`inset(0 0 0 ${clamp01((wipe-.18)/.5)*100}%)`:'none';
+}
+let t0=performance.now(),scrubbing=false;const scrub=document.getElementById('scrub');
+function loop(now){if(!scrubbing){const t=((now-t0)/1000)%T.end;scrub.value=t;render(t);}requestAnimationFrame(loop);}
+requestAnimationFrame(loop);
+scrub.oninput=()=>{scrubbing=true;render(+scrub.value);};
+document.getElementById('replay').onclick=()=>{scrubbing=false;t0=performance.now();};
+window.renderAt=t=>{scrubbing=true;scrub.value=t;render(t);};
+</script>

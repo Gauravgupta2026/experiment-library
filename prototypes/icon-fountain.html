@@ -1,0 +1,120 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Icon fountain prototype</title>
+<style>
+  html,body{margin:0;height:100%;background:#0b0b0d;display:grid;place-items:center;font-family:-apple-system,"SF Pro Display",Inter,system-ui,sans-serif}
+  #phone{position:relative;width:390px;height:844px;background:#000;border-radius:44px;overflow:hidden;color:#fff}
+  canvas{position:absolute;inset:0;width:100%;height:100%}
+  #close{position:absolute;left:24px;top:64px;color:#FF8A3D;font-size:17px}
+  #icon{position:absolute;left:157px;top:224px;width:76px;height:76px;border-radius:18px;border:0;padding:0;cursor:pointer;
+    background:linear-gradient(#F7F7F4,#E9E7E1);box-shadow:0 2px 10px rgba(0,0,0,.5);display:grid;place-items:center;
+    transition:transform .45s cubic-bezier(.3,1.8,.5,1)}
+  #icon:active{transform:scale(.9);transition-duration:.08s}
+  #icon i{width:46px;height:34px;border-radius:9px;background:linear-gradient(#FFA63D,#F2761B);position:relative;display:block;margin-top:8px}
+  #icon i:before{content:"";position:absolute;left:13px;top:-9px;width:16px;height:9px;border:3px solid #3a332c;border-bottom:0;border-radius:6px 6px 0 0}
+  h1{position:absolute;left:24px;right:24px;top:330px;margin:0;text-align:center;font-size:30px;line-height:36px;font-weight:700;letter-spacing:-.02em}
+  p{position:absolute;left:44px;right:44px;top:420px;margin:0;text-align:center;font-size:17px;line-height:23px;color:#EDEDED}
+</style>
+<div id="phone">
+  <canvas id="c"></canvas>
+  <span id="close">Close</span>
+  <button id="icon" aria-label="Celebrate"><i></i></button>
+  <h1>Thank you for<br>subscribing!</h1>
+  <p>We appreciate you're traveling with us.</p>
+</div>
+<script>
+/*
+ * Icon fountain. Canvas 2D, additive blending. Sprites are pre-rendered once
+ * per (glyph, colour, blur level), so the frame loop only calls drawImage.
+ * Blur uses the shadow-offset trick, which works in Safari (ctx.filter does not).
+ */
+const P={
+  burstCount:26, burstSpreadMs:180,
+  speedMin:480, speedMax:760,          // px/s at launch
+  angleMinDeg:4, angleMaxDeg:20,       // away from vertical, mirrored to both sides
+  gravity:1500, dragX:1.2, dragY:.25,  // px/s^2 and 1/s
+  lifeMin:1.9, lifeMax:2.6,
+  baseSize:36, scaleStart:.6, scaleEnd:2.0, depthCurve:1.3,
+  spinMax:2.5,                         // rad/s
+  fadeOutStart:.62, blurStart:.45, maxBlurPx:7,
+  colors:['#2F6BFF','#3FA0FF','#8B5CFF','#F0509A','#1FCB6B','#FF9A2E'],
+  colorWeights:[4,3,3,2,2,1],
+};
+const GLYPHS={
+  bank:'M3 9 L12 4 L21 9 Z M5 10 V18 M9.5 10 V18 M14.5 10 V18 M19 10 V18 M3 20 H21',
+  plane:'M12 3 C13 3 13.5 4 13.5 5.5 V9 L21 13.5 V15.5 L13.5 13 V18 L16 20 V21.5 L12 20.5 L8 21.5 V20 L10.5 18 V13 L3 15.5 V13.5 L10.5 9 V5.5 C10.5 4 11 3 12 3 Z',
+  suitcase:'M4 8 H20 V20 H4 Z M9 8 V5 H15 V8 M9 11 V17 M15 11 V17',
+  bus:'M5 4 H19 V18 H5 Z M5 12 H19 M8 18 V20 M16 18 V20',
+  bed:'M3 6 V19 M3 15 H21 V19 M21 15 V12 C21 10.5 20 10 18.5 10 H10 V15',
+  ring:'M12 4 A8 8 0 1 0 12.01 4 M12 9 A3 3 0 1 0 12.01 9',
+};
+const BLUR_LEVELS=[0,2.5,5,7.5], SPRITE=128;   // sprite px; glyph drawn at 72 px inside for glow room
+const sprites={};
+function makeSprite(path,color,blur){
+  const c=document.createElement('canvas');c.width=c.height=SPRITE;const x=c.getContext('2d');
+  const OFF=4000,s=72/24;
+  x.lineCap=x.lineJoin='round';
+  const draw=(lw,shadowBlur,alpha)=>{
+    x.save();x.globalAlpha=alpha;x.shadowColor=color;x.shadowBlur=shadowBlur;x.shadowOffsetX=OFF;
+    x.translate(SPRITE/2-36-OFF,SPRITE/2-36);x.scale(s,s);x.lineWidth=lw;x.strokeStyle=color;x.stroke(new Path2D(path));x.restore();
+  };
+  draw(3.4,10+blur*2.2,.55);        // outer glow
+  draw(3.2,1.5+blur*2,1);           // body, soft by blur level
+  if(blur===0){                     // sharp core only on the in-focus level
+    x.save();x.translate(SPRITE/2-36,SPRITE/2-36);x.scale(s,s);x.lineCap=x.lineJoin='round';
+    x.lineWidth=3;x.strokeStyle=color;x.stroke(new Path2D(path));
+    x.globalAlpha=.35;x.lineWidth=.9;x.strokeStyle='#fff';x.stroke(new Path2D(path));x.restore();
+  }
+  return c;
+}
+for(const g in GLYPHS)for(const col of P.colors)BLUR_LEVELS.forEach((b,i)=>sprites[g+col+i]=makeSprite(GLYPHS[g],col,b));
+
+const cv=document.getElementById('c'),ctx=cv.getContext('2d');
+const DPR=Math.min(2,devicePixelRatio||1);cv.width=390*DPR;cv.height=844*DPR;
+const EMIT={x:195,y:262};
+let parts=[],queue=[];
+const rnd=(a,b)=>a+Math.random()*(b-a);
+function pickColor(){let t=Math.random()*P.colorWeights.reduce((a,b)=>a+b),i=0;while((t-=P.colorWeights[i])>0)i++;return P.colors[i];}
+function burst(){
+  const names=Object.keys(GLYPHS);
+  for(let i=0;i<P.burstCount;i++)queue.push({at:clock+Math.random()*P.burstSpreadMs,side:i%2?1:-1,g:names[i%names.length]});
+}
+function spawn(q){
+  const a=rnd(P.angleMinDeg,P.angleMaxDeg)*Math.PI/180*q.side,v=rnd(P.speedMin,P.speedMax);
+  parts.push({x:EMIT.x+rnd(-10,10),y:EMIT.y,vx:Math.sin(a)*v,vy:-Math.cos(a)*v,age:0,life:rnd(P.lifeMin,P.lifeMax),
+    rot:rnd(0,6.28),spin:rnd(-P.spinMax,P.spinMax),g:q.g,col:pickColor(),size:P.baseSize*rnd(.8,1.25)});
+}
+// clock is simulation time in ms. It advances only in tick(), so tests can step it.
+let last=performance.now(),clock=0,manual=false;
+function frame(now){
+  const dt=Math.min(.033,(now-last)/1000);last=now;
+  if(!manual)tick(dt);
+  requestAnimationFrame(frame);
+}
+function tick(dt){
+  clock+=dt*1000;
+  queue=queue.filter(q=>q.at>clock||(spawn(q),false));
+  ctx.setTransform(DPR,0,0,DPR,0,0);ctx.clearRect(0,0,390,844);ctx.globalCompositeOperation='lighter';
+  parts=parts.filter(p=>p.age<p.life&&p.y<900);
+  // far (small, young) first so near (large) particles draw on top
+  parts.sort((a,b)=>a.age/a.life-b.age/b.life);
+  for(const p of parts){
+    p.age+=dt;p.vy+=P.gravity*dt;p.vx*=Math.exp(-P.dragX*dt);p.vy*=Math.exp(-P.dragY*dt);
+    p.x+=p.vx*dt;p.y+=p.vy*dt;p.rot+=p.spin*dt;
+    const f=p.age/p.life,d=Math.pow(f,P.depthCurve);
+    const size=p.size*(P.scaleStart+(P.scaleEnd-P.scaleStart)*d);
+    const bl=Math.max(0,(f-P.blurStart)/(1-P.blurStart))*(BLUR_LEVELS.length-1);
+    const i0=Math.floor(bl),i1=Math.min(BLUR_LEVELS.length-1,i0+1),mixB=bl-i0;
+    const fadeIn=Math.min(1,p.age/.08),fadeOut=1-Math.min(1,Math.max(0,(f-P.fadeOutStart)/(1-P.fadeOutStart)))**1.5;
+    const alpha=fadeIn*fadeOut;
+    const draw=(lvl,a)=>{if(a<=.01)return;ctx.globalAlpha=a;const s=size*SPRITE/72;
+      ctx.setTransform(DPR,0,0,DPR,p.x*DPR,p.y*DPR);ctx.rotate(p.rot);ctx.drawImage(sprites[p.g+p.col+lvl],-s/2,-s/2,s,s);};
+    draw(i0,alpha*(1-mixB));draw(i1,alpha*mixB);
+  }
+}
+requestAnimationFrame(frame);
+document.getElementById('icon').addEventListener('pointerdown',burst);
+window.burst=burst;
+// Test hook: advance the simulation by a fixed time with 60 Hz steps.
+window.step=function(sec){manual=true;for(let i=0;i<Math.round(sec*60);i++)tick(1/60);};
+</script>
