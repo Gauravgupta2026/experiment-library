@@ -63,6 +63,7 @@ a { color: inherit; text-decoration: none; }
   border-radius: 16px; box-shadow: var(--shadow-frame); overflow: hidden; background: var(--surface); isolation: isolate; }
 .frame:fullscreen { border-radius: 0; width: 100vw; height: 100vh; }
 .frame-mount { position: absolute; inset: 0; overflow: hidden; }
+.frame-error { position: absolute; inset: 0; display: grid; place-items: center; margin: 0; padding: 24px; text-align: center; color: var(--text-2); background: var(--surface); }
 .frame-play { position: absolute; left: 50%; bottom: 16px; transform: translateX(-50%); z-index: 5; height: 36px; padding: 0 16px;
   border-radius: var(--r-pill); border: 0; background: color-mix(in srgb, var(--bg) 85%, transparent); backdrop-filter: blur(8px);
   font: 500 13px/16px var(--font); box-shadow: var(--shadow-pop); }
@@ -157,7 +158,12 @@ select.field { appearance: none; padding-right: 28px;
 
 @media (max-width: 1023px) {
   .page { display: block; height: auto; min-height: calc(100dvh - var(--nav-h)); padding-bottom: 96px; }
-  .stage { padding: 12px; height: min(70dvh, calc(100dvh - var(--nav-h) - 96px)); }
+  .stage { padding: 12px 12px 16px; display: block; }
+  .stage-fit { container-type: inline-size; display: block; }
+  .frame, .transport { width: 100%; }
+  .transport { margin-top: 12px; }
+  .stage-btns { top: 20px; }
+  .stage-btns.left { left: 20px; } .stage-btns.right { right: 20px; }
   .panel { position: fixed; left: 0; right: 0; bottom: 0; z-index: 15; height: 70dvh; border-left: 0; border-radius: 16px 16px 0 0;
     box-shadow: 0 -8px 32px rgba(15, 15, 20, 0.16), 0 0 0 1px var(--border); will-change: transform; }
   .panel-scroll { padding-top: 4px; }

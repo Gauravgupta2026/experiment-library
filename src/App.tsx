@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { BrowserRouter, Route, Routes, useSearchParams } from 'react-router-dom';
+import { BrowserRouter, Route, Routes, useLocation, useSearchParams } from 'react-router-dom';
+import { ErrorBoundary } from './shell/ErrorBoundary';
 import { ExperimentPage } from './shell/ExperimentPage';
 import { Feed } from './shell/Feed';
 import { Nav, type Theme } from './shell/Nav';
@@ -13,6 +14,7 @@ const systemTheme = (): Theme => (matchMedia('(prefers-color-scheme: dark)').mat
 
 function Shell(): JSX.Element {
   const [search] = useSearchParams();
+  const { pathname } = useLocation();
   const capture = search.get('capture') === '1';
   const [theme, setTheme] = useState<Theme>(() => readStored() ?? systemTheme());
 
@@ -33,15 +35,17 @@ function Shell(): JSX.Element {
   return (
     <>
       {capture ? null : <Nav theme={theme} onToggleTheme={toggle} />}
+      <ErrorBoundary resetKey={pathname}>
       <Routes>
         <Route path="/" element={<Feed />} />
         <Route path="/e/:id" element={<ExperimentPage />} />
         <Route path="*" element={<main className="feed"><div className="intro"><h1>Not found</h1></div></main>} />
       </Routes>
+      </ErrorBoundary>
     </>
   );
 }
 
 export function App(): JSX.Element {
-  return <BrowserRouter><Shell /></BrowserRouter>;
+  return <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}><Shell /></BrowserRouter>;
 }

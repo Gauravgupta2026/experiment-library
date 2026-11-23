@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties, type PointerEvent as RPointerEvent } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
-import { DEFAULT_SEED } from '../config';
+import { DEFAULT_SEED, STAGE_MAX_DPR } from '../config';
 import { experiments, findExperiment } from '../experiments/registry';
 import type { ExperimentBody, ExperimentMeta, Params, ParamValue } from '../experiments/types';
 import { hexToRgb, hsvToRgb, rgbToHex, rgbToHsv } from '../lib/color';
@@ -16,7 +16,7 @@ const TRANSPORT_SPACE = '44px';           // 32 px bar + 12 px gap
 const SHEET_PEEK = 96;
 const SHEET_QUERY = '(max-width: 1023px)';
 const SHEET_SPRING_OMEGA = Math.sqrt(300); // stiffness 300; damping 30 is close to critical
-const CAPTURE_KEYS = new Set(['capture', 't', 'seed', 'p']);
+const CAPTURE_KEYS = new Set(['capture', 't', 'seed', 'p', 'poster']);
 
 declare global { interface Window { __ready?: boolean } }
 
@@ -29,15 +29,20 @@ const Icon = ({ d }: { d: JSX.Element }): JSX.Element => (
 );
 const fmt = (t: number): string => `${Math.floor(t / 60)}:${(t % 60).toFixed(1).padStart(4, '0')}`;
 
-function useBody(meta: ExperimentMeta | undefined): ExperimentBody | null {
+function useBody(meta: ExperimentMeta | undefined): { body: ExperimentBody | null; error: boolean; retry(): void } {
   const [state, setState] = useState<{ id: string; body: ExperimentBody } | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [attempt, setAttempt] = useState(0);
   useEffect(() => {
     if (!meta) return;
     let alive = true;
-    void meta.load().then((m) => { if (alive) setState({ id: meta.id, body: m.default }); });
+    meta.load().then(
+      (m) => { if (alive) { setState({ id: meta.id, body: m.default }); setError(null); } },
+      (err: unknown) => { console.error(err); if (alive) setError(meta.id); },
+    );
     return () => { alive = false; };
-  }, [meta]);
-  return meta && state?.id === meta.id ? state.body : null;
+  }, [meta, attempt]);
+  return { body: meta && state?.id === meta.id ? state.body : null, error: !!meta && error === meta.id, retry: () => setAttempt((a) => a + 1) };
 }
 
 /** Transport bar for experiments with a timeline. It reads the clock on each frame. */
@@ -108,8 +113,9 @@ function useSheet(): { style: CSSProperties; handleProps: { onPointerDown(e: RPo
 export function ExperimentPage(): JSX.Element {
   const { id } = useParams();
   const meta = findExperiment(id);
-  const body = useBody(meta);
+  const { body, error, retry } = useBody(meta);
   if (!meta) return <main className="feed"><div className="intro"><h1>Not found</h1><p>There is no experiment with this address.</p></div></main>;
+  if (error) return <main className="feed"><div className="intro"><h1>Could not load</h1><p>The code for this experiment did not load.</p><button type="button" className="btn" style={{ marginTop: 12 }} onClick={retry}>Try again</button></div></main>;
   if (!body) return <main className="page" aria-busy="true"><div className="stage" style={{ background: meta.stageBackground }} /><aside className="panel" /></main>;
   return <Loaded key={meta.id} meta={meta} body={body} />;
 }
@@ -129,7 +135,8 @@ function Loaded({ meta, body }: { meta: ExperimentMeta; body: ExperimentBody }):
   const urlTimer = useRef(0);
   const sheet = useSheet();
   const reduced = useMemo(prefersReducedMotion, []);
-  const pausedAt = capture ? Number(search.get('t')) || 0 : reduced ? body.posterTime : undefined;
+  // Capture mode: `t` seeks to a time; `poster=1` seeks to the experiment's poster time.
+  const pausedAt = capture ? (search.get('poster') === '1' ? body.posterTime : Number(search.get('t')) || 0) : reduced ? body.posterTime : undefined;
 
   const apply = useCallback((next: Params): void => {
     setParams(next); paramsRef.current = next;
@@ -202,7 +209,9 @@ function Loaded({ meta, body }: { meta: ExperimentMeta; body: ExperimentBody }):
   };
 
   const frameStyle = { '--aspect': String(meta.aspect), viewTransitionName: `exp-${meta.id}` } as CSSProperties;
-  const stage = <Stage body={body} initialParams={initial} seed={seed} startPausedAt={pausedAt} onReady={onReady} onParam={onParam} />;
+  // A poster looks like a feed card: no in-frame chrome (for example the orb tabs).
+  const poster = capture && search.get('poster') === '1';
+  const stage = <Stage body={body} initialParams={initial} seed={seed} startPausedAt={pausedAt} onReady={onReady} onParam={onParam} preview={poster} maxDpr={poster ? STAGE_MAX_DPR : undefined} />;
 
   if (capture) return <div className="capture"><div className="frame" id="frame" style={{ '--aspect': String(meta.aspect) } as CSSProperties}>{stage}</div></div>;
 

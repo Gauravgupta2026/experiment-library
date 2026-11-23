@@ -47,7 +47,7 @@ const mixRect = (a: Rect, z: Rect, k: number): Rect => ({ x0: lerp(a.x0, z.x0, k
 
 const body: ExperimentBody = {
   duration: DURATION,
-  posterTime: 7.5,
+  posterTime: 3.25,
   defaults: {
     line: 'Imagine to have all your tools', words: 'in one place', finalWord: 'intro|ducing',
     figureImage: '', bgTop: '#FACA96', bgBottom: '#9E92F8',
