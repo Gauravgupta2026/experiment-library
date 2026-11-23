@@ -38,8 +38,24 @@ const TAB_CSS = `
 .orb-tabs i{position:absolute;top:.375em;left:0;height:2.5em;border-radius:999px;background:linear-gradient(#FFFFFF,#F1F1F5);
   box-shadow:0 1px 3px rgba(20,20,40,.14),0 0 0 1px rgba(20,20,40,.05);transition:transform .22s cubic-bezier(.22,1,.36,1),width .22s cubic-bezier(.22,1,.36,1)}`;
 
+const PALETTE_KEYS = ['background', 'domeTop', 'domeLow', 'rim', 'band', 'bandEnd', 'glowTop', 'blue', 'violet', 'mauve', 'glowSide'];
+
 const body: ExperimentBody = {
   posterTime: 3,
+  traits: {
+    outputs: [
+      { id: 'palette', type: 'palette', label: 'Palette', keys: PALETTE_KEYS, runtime: true },
+      { id: 'softness', type: 'softness', label: 'Softness', keys: ['softness'], runtime: true },
+      { id: 'shape', type: 'shape', label: 'Dome, band and notch', keys: [], runtime: false,
+        note: 'Signed-distance shapes with soft smoothstep edges, no blur pass: egg-shaped glow, dome cut at a horizon, band, notch. See FRAG in src/experiments/sun-orb/shader.ts.' },
+      { id: 'states', type: 'behaviour', label: 'State machine', keys: [], runtime: false,
+        note: 'Six states driven by critically damped springs and a sin2/cos2 pulse envelope; a new pulse takes the max of the old one. See setState and simulate in src/experiments/sun-orb/index.ts.' },
+    ],
+    inputs: [
+      { id: 'palette', type: 'palette', label: 'Palette', keys: PALETTE_KEYS, runtime: true },
+      { id: 'softness', type: 'softness', label: 'Softness', keys: ['softness'], runtime: true },
+    ],
+  },
   defaults: {
     state: 'Rise', showTabs: true,
     size: 1, softness: 1, horizon: 0, notch: 1,

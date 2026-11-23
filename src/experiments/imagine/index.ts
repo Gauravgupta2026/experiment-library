@@ -45,8 +45,24 @@ const CSS = `
 interface Rect { x0: number; y0: number; x1: number; y1: number }
 const mixRect = (a: Rect, z: Rect, k: number): Rect => ({ x0: lerp(a.x0, z.x0, k), y0: lerp(a.y0, z.y0, k), x1: lerp(a.x1, z.x1, k), y1: lerp(a.y1, z.y1, k) });
 
+const PALETTE_KEYS = ['bgTop', 'bgBottom', 'pal1', 'pal2', 'pal3', 'pal4', 'pal5'];
+
 const body: ExperimentBody = {
   duration: DURATION,
+  traits: {
+    outputs: [
+      { id: 'palette', type: 'palette', label: 'Palette', keys: PALETTE_KEYS, runtime: true },
+      { id: 'softness', type: 'softness', label: 'Figure softness', keys: ['softness'], runtime: true },
+      { id: 'pixel-wipe', type: 'behaviour', label: 'Pixel wipe', keys: [], runtime: false,
+        note: 'Square cells on a fixed grid; a noisy diagonal field decides when each cell turns to the wipe colour; edge cells flash random accent colours. See the wipe block in src/experiments/imagine/shader.ts.' },
+      { id: 'marker-hunt', type: 'behaviour', label: 'Marker hunt', keys: [], runtime: false,
+        note: 'Four markers jump between random rectangles every 90 ms, then lock with a tween; bracket words grow with an underdamped spring. See render() in src/experiments/imagine/index.ts.' },
+    ],
+    inputs: [
+      { id: 'palette', type: 'palette', label: 'Palette', keys: PALETTE_KEYS, runtime: true },
+      { id: 'softness', type: 'softness', label: 'Figure softness', keys: ['softness'], runtime: true },
+    ],
+  },
   posterTime: 3.25,
   defaults: {
     line: 'Imagine to have all your tools', words: 'in one place', finalWord: 'intro|ducing',

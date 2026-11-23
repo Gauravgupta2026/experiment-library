@@ -1,4 +1,5 @@
 import type { Clock } from '../lib/clock';
+import type { Traits } from './traits';
 
 export type Category = 'Shader' | 'Particles' | 'Type' | 'Illustration';
 
@@ -64,6 +65,8 @@ export interface ExperimentBody {
   posterTime: number;
   defaults: Params;
   groups: ControlGroup[];
+  /** What this experiment gives and takes in the node canvas. Required: the contract test checks it. */
+  traits: Traits;
   presets?: { name: string; params: Partial<Params> }[];
   mount(el: HTMLElement, params: Params, ctx: MountContext): ExperimentInstance;
 }

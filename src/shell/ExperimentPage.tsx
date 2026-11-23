@@ -18,7 +18,7 @@ const SHEET_QUERY = '(max-width: 1023px)';
 const SHEET_SPRING_OMEGA = Math.sqrt(300); // stiffness 300; damping 30 is close to critical
 const CAPTURE_KEYS = new Set(['capture', 't', 'seed', 'p', 'poster']);
 
-declare global { interface Window { __ready?: boolean } }
+declare global { interface Window { __ready?: boolean; __stage?: StageHandle; __params?: Params } }
 
 const I = {
   back: <path d="M9.5 3.5L5 8l4.5 4.5M5 8h7" />, replay: <path d="M3 8a5 5 0 1 0 1.6-3.7M3 3v2.6h2.6" />,
@@ -158,6 +158,8 @@ function Loaded({ meta, body }: { meta: ExperimentMeta; body: ExperimentBody }):
     setHandle(h);
     if (!h) return;
     if (capture) {
+      // Test hooks: timing and visual tests drive the instance directly from the full current params.
+      window.__stage = h; window.__params = paramsRef.current;
       // Extra query keys go to the experiment, for example state=approved or shaderTime=5.
       new URLSearchParams(window.location.search).forEach((v, k) => { if (!CAPTURE_KEYS.has(k)) h.instance.trigger(`capture:${k}=${v}`); });
       h.clock.refresh();

@@ -76,8 +76,24 @@ const CSS = `
 
 interface Box { x0: number; y0: number; x1: number; y1: number }
 
+const PALETTE_KEYS = ['base', 'glowColor', 'mid', 'magenta', 'orange', 'red'];
+
 const body: ExperimentBody = {
   duration: DURATION,
+  traits: {
+    outputs: [
+      { id: 'palette', type: 'palette', label: 'Palette', keys: PALETTE_KEYS, runtime: true },
+      { id: 'softness', type: 'softness', label: 'Edge softness', keys: ['edgeSoft'], runtime: true },
+      { id: 'melt', type: 'behaviour', label: 'Blur melt', keys: [], runtime: false,
+        note: 'A DOM scene shrinks, blurs and colour-shifts as one filtered layer while a WebGL mesh gradient rises with a wavy edge. See render() and FRAG in src/experiments/modern-creatives/index.ts.' },
+      { id: 'word-reveal', type: 'behaviour', label: 'Word reveal and markers', keys: [], runtime: false,
+        note: 'Words appear one by one with fixed layout; four square markers track the corners of the visible words, then move to a strip. See render() in src/experiments/modern-creatives/index.ts.' },
+    ],
+    inputs: [
+      { id: 'palette', type: 'palette', label: 'Palette', keys: PALETTE_KEYS, runtime: true },
+      { id: 'softness', type: 'softness', label: 'Edge softness', keys: ['edgeSoft'], runtime: true },
+    ],
+  },
   posterTime: 6.5,
   defaults: {
     wordLeft: 'you', wordRight: 'create', headline: 'The AI powered platform for modern creatives', wordInterval: 0.42,
